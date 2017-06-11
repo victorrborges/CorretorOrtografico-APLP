@@ -5,13 +5,15 @@
 using namespace std;
 
 vector <string> dicionario;
+string texto;
 
 void setup() {
 	cout << "" << endl
-			 << "Bem vindo ao Corretor Ortográfico!" << endl
+			 << "CORRETOR ORTOGRÁFICO!" << endl
+			 << "" << endl
 			 << "Primeiramente, iremos configurar o dicionário." << endl
 	     << "Digite as palavras que você deseja incluir no dicionário: " << endl
-	     << "OBS: ao finalizar, digite \"end-dicionario\". " << endl;
+	     << "obs: ao finalizar, digite \"end-dicionario\". " << endl;
 	string entrada;
 	while (entrada != "end-dicionario") {
 		cin >> entrada;
@@ -20,7 +22,9 @@ void setup() {
 }
 
 void menuPrincipal() {
-	cout << "=== Menu Principal ===" << endl
+	cout << "" << endl
+	     << "MENU PRINCIPAL" << endl
+			 << "" << endl
 	     << "Escolha uma Opção:" << endl
 			 << "1 - Corrigir texto" << endl
 			 << "2 - Finalizar o programa" << endl;
@@ -28,9 +32,10 @@ void menuPrincipal() {
 }
 
 void corrigirTexto() {
-	cout << "=== Correção de Textos ===" << endl
+	cout << "CORREÇÃO DE TEXTOS" << endl
+	     << "" << endl
 			 << "Digite o texto que você deseja corrigir: " << endl;
-	// Ler o texto e guardar em uma variável (global?)
+	getLine(cin,texto);
 	// Chamar o varrerPalavras();
 }
 
