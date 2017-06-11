@@ -1,20 +1,22 @@
 #include<iostream>
 #include<string>
+#include <vector>
 
 using namespace std;
 
-int main () {
-	setup();
-	menuPrincipal();
-	return (0);
-}
+vector <string> dicionario;
 
 void setup() {
-	cout << "Bem vindo ao Corretor Ortográfico!" << endl
+	cout << "" << endl
+			 << "Bem vindo ao Corretor Ortográfico!" << endl
 			 << "Primeiramente, iremos configurar o dicionário." << endl
 	     << "Digite as palavras que você deseja incluir no dicionário: " << endl
 	     << "OBS: ao finalizar, digite \"end-dicionario\". " << endl;
-	// Realizar a leitura das palavras e guardar em um array (global?)
+	string entrada;
+	while (entrada != "end-dicionario") {
+		cin >> entrada;
+		dicionario.push_back(entrada);
+	}
 }
 
 void menuPrincipal() {
@@ -43,7 +45,7 @@ void menuCorrecao() {
 			 << "1 - CORRIGIR" << endl
 			 << "2 - ADICIONAR" << endl
 			 << "3 - IGNORAR" << endl << endl
-			 << "Escolha opção:" << endl
+			 << "Escolha opção:" << endl;
 }
 
 void corrigir() {
@@ -56,4 +58,10 @@ void palavrasParecidas() {
 
 void adicionar() {
 	// Acrescentar a palavra no dicionario
+}
+
+int main () {
+	setup();
+	menuPrincipal();
+	return (0);
 }
