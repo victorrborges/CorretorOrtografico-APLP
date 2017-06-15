@@ -139,7 +139,7 @@ void menuPrincipal() {
 
 void menuCorrecao(string palavra) {
 	int option;
-	// O print deve adicionar a palavra errada referente
+	// O print deve adicionar a palavra errada referente	
 	cout << "" << endl
 			 << "Palavra errada ----> " << palavra << endl
 			 << "1 - CORRIGIR" << endl
@@ -158,6 +158,8 @@ void menuCorrecao(string palavra) {
 	 			case 2:
 	 				adicionar(palavra);
 	 				break;
+				case 3:
+					break;
 	 			default:
 	 				cout << "Opção inválida" << endl;
 	 				break;
@@ -166,21 +168,27 @@ void menuCorrecao(string palavra) {
 }
 
 bool primeiraVerificacao(string palavra, string palavraDoDicionario) {
-	int aux = fabs(palavra.length() - palavraDoDicionario.length());
+	int diferencaDeTamanho = fabs(palavra.length() - palavraDoDicionario.length());
+	int letrasErradas = 0;
 	int palavra1 = palavra.length();
 	int palavra2 = palavraDoDicionario.length();
 	int count;
+	if(diferencaDeTamanho > 2) {
+		return false;	
+	}
+
 	if (palavra1 > palavra2) {
 		count = palavra1;
 	} else {
 		count = palavra2;
 	}
+
 	for (int i = 0; i < count; i++) {
 		if(palavra[i] != palavraDoDicionario[i]) {
-			aux++;
+			letrasErradas++;
 		}
 	}
-	if(aux > 2) {
+	if(letrasErradas > 2) {
 		return false;
 	} else {
 		return true;
