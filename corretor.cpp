@@ -206,7 +206,7 @@ void palavrasParecidas(string palavra) {
 	vector <string> parecidas;
 
 	for (int i = 0; i < dicionario.size(); i++) {
-		if(segundaVerificacao(palavra, dicionario[i])) {
+		if(primeiraVerificacao(palavra, dicionario[i]) || segundaVerificacao(palavra, dicionario[i])) {
 			parecidas.push_back(dicionario[i]);
 		}
 	}
