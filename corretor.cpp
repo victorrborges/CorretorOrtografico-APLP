@@ -52,11 +52,11 @@ vector<string> split(string str, char delimiter) {
   vector<string> internal;
   stringstream ss(str); // Turn the string into a stream.
   string tok;
-  
+
   while(getline(ss, tok, delimiter)) {
     internal.push_back(tok);
   }
-  
+
   return internal;
 }
 
@@ -86,7 +86,8 @@ void varrerPalavras() {
 		}
 	}
 
-	cout << "=======> Texto após correção: ";
+	cout << "" << endl
+			 << "=======> Texto após correção: ";
 	for (int i = 0; i < palavrasDoTexto.size(); i++) {
 		cout << palavrasDoTexto[i] + " ";
 	}
@@ -94,12 +95,11 @@ void varrerPalavras() {
 }
 
 void corrigirTexto() {
-	cout << "CORREÇÃO DE TEXTOS" << endl
+	cout << "" << endl
+			 << "CORREÇÃO DE TEXTOS" << endl
 	     << "" << endl
 			 << "Digite o texto que você deseja corrigir: " << endl;
-	//nao esta salvando a ultima palavra do texto
 	getline (cin,texto);
-	// Chamar o varrerPalavras();
 	varrerPalavras();
 }
 
@@ -138,7 +138,8 @@ void menuPrincipal() {
 void menuCorrecao(string palavra) {
 	int option;
 	// O print deve adicionar a palavra errada referente
-	cout << "Palavra errada ----> " << endl << palavra << endl
+	cout << "" << endl
+			 << "Palavra errada ----> " << endl << palavra << endl
 			 << "1 - CORRIGIR" << endl
 			 << "2 - ADICIONAR" << endl
 			 << "3 - IGNORAR" << endl << endl
@@ -163,7 +164,7 @@ void menuCorrecao(string palavra) {
 }
 
 bool primeiraVerificacao(string palavra, string palavraDoDicionario) {
-	int aux = abs(palavra.length() - palavraDoDicionario.length());
+	int aux = fabs(palavra.length() - palavraDoDicionario.length());
 	int palavra1 = palavra.length();
 	int palavra2 = palavraDoDicionario.length();
 	int count;
@@ -193,7 +194,7 @@ bool segundaVerificacao(string palavra, string palavraDoDicionario) {
 		for (int i = 0; i < palavra1; i++) {
 			for (int j = 0; j < palavra1; j++) {
 				if(palavra[i] == palavraDoDicionario[j]) {
-					palavraDoDicionario[i] == '0';
+					palavraDoDicionario[i] = '0';
 				}
 			}
 		}
@@ -224,8 +225,10 @@ void palavrasParecidas(string palavra) {
 		}
 	}
 
+	int index = 1;
 	for (int i = 0; i < parecidas.size(); i++) {
-		cout << i + 1 <<". "<< parecidas[i]<< endl;
+		cout << index <<". "<< parecidas[i]<< endl;
+		index++;
 	}
 
 	int option;
@@ -234,7 +237,7 @@ void palavrasParecidas(string palavra) {
 	cin.ignore();
 
 	replace(palavrasDoTexto.begin(), palavrasDoTexto.end(), palavra, parecidas[option-1]);
-	
+
 
 }
 
