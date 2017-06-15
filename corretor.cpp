@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <sstream>
 
 using namespace std;
 
@@ -47,17 +48,21 @@ void setup() {
 	dicionario.pop_back();
 }
 
+vector<string> split(string str, char delimiter) {
+  vector<string> internal;
+  stringstream ss(str); // Turn the string into a stream.
+  string tok;
+  
+  while(getline(ss, tok, delimiter)) {
+    internal.push_back(tok);
+  }
+  
+  return internal;
+}
+
 void dividirTexto() {
 
-	string delimiter = " ";
-
-	size_t pos = 0;
-	string token;
-	while ((pos = texto.find(delimiter)) != std::string::npos) {
-    		token = texto.substr(0, pos);
-    		palavrasDoTexto.push_back(token);
-    		texto.erase(0, pos + delimiter.length());
-	}
+	palavrasDoTexto = split(texto, ' ');
 
 
 }
@@ -216,6 +221,14 @@ void palavrasParecidas(string palavra) {
 	for (int i = 0; i < parecidas.size(); i++) {
 		cout << i + 1 <<". "<< parecidas[i]<< endl;
 	}
+
+	int option;
+
+	cin >> option;
+	cin.ignore();
+
+	replace(palavrasDoTexto.begin(), palavrasDoTexto.end(), palavra, parecidas[option-1]);
+	
 
 }
 
