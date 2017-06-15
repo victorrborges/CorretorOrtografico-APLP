@@ -92,6 +92,8 @@ void varrerPalavras() {
 		cout << palavrasDoTexto[i] + " ";
 	}
 
+	cout << "" << endl;
+
 }
 
 void corrigirTexto() {
@@ -139,7 +141,7 @@ void menuCorrecao(string palavra) {
 	int option;
 	// O print deve adicionar a palavra errada referente
 	cout << "" << endl
-			 << "Palavra errada ----> " << endl << palavra << endl
+			 << "Palavra errada ----> " << palavra << endl
 			 << "1 - CORRIGIR" << endl
 			 << "2 - ADICIONAR" << endl
 			 << "3 - IGNORAR" << endl << endl
@@ -186,26 +188,10 @@ bool primeiraVerificacao(string palavra, string palavraDoDicionario) {
 }
 
 bool segundaVerificacao(string palavra, string palavraDoDicionario) {
-	int palavra1 = palavra.length();
-	int palavra2 = palavraDoDicionario.length();
-
-	if(palavra1 == palavra2) {
-
-		for (int i = 0; i < palavra1; i++) {
-			for (int j = 0; j < palavra1; j++) {
-				if(palavra[i] == palavraDoDicionario[j]) {
-					palavraDoDicionario[i] = '0';
-				}
-			}
-		}
-
-		for (int i = 0; i < palavraDoDicionario.length(); i++) {
-			if(palavraDoDicionario[i] != '0') {
-				return false;
-			}
-		}
+	sort(palavra.begin(), palavra.end());
+	sort(palavraDoDicionario.begin(), palavraDoDicionario.end());
+	if(palavra == palavraDoDicionario) {
 		return true;
-
 	} else {
 		return false;
 	}
@@ -220,9 +206,15 @@ void palavrasParecidas(string palavra) {
 	vector <string> parecidas;
 
 	for (int i = 0; i < dicionario.size(); i++) {
-		if(primeiraVerificacao(palavra, dicionario[i]) || segundaVerificacao(palavra, dicionario[i])) {
+		if(segundaVerificacao(palavra, dicionario[i])) {
 			parecidas.push_back(dicionario[i]);
 		}
+	}
+
+	if (parecidas.size() == 0) {
+		cout <<"Não há sugestões. Escolha outra opção."<< endl;
+		menuCorrecao(palavra);
+		return;
 	}
 
 	int index = 1;
