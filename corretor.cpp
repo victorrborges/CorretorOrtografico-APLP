@@ -85,6 +85,12 @@ void varrerPalavras() {
 			menuCorrecao(palavrasDoTexto[i]);
 		}
 	}
+
+	cout << "=======> Texto após correção: ";
+	for (int i = 0; i < palavrasDoTexto.size(); i++) {
+		cout << palavrasDoTexto[i] + " ";
+	}
+
 }
 
 void corrigirTexto() {
