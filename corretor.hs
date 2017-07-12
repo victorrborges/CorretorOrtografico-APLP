@@ -31,16 +31,32 @@ corrigirTexto = do
 	salvarTexto
 	varrerPalavras
 
-dividirTexto :: IO()
-dividirTexto = do
-	--texto <- readFile "texto.txt"
-	--palavrasDoTexto <- splitOn " " texto
-	putStr ""
+dividirTexto :: [String]
+dividirTexto =
+	texto <- readFile "texto.txt"
+	palavrasDoTexto <- (words texto)
+	
 
+dividirDicionario :: [String]
+dividirDicionario =
+	dicionario <- readFile "dicionario.txt"
+	palavrasDicionario <- (words dicionario)
 
+--verificar as palavras do texto, no dicionario
 varrerPalavras :: IO()
 varrerPalavras = do
-	dividirTexto
+	palavrasTexto = dividirTexto
+	palavrasDicionario = dividirDicionario
+	if(!pertenceAoDicionario(palavrasDicionario palavrasTexto)) then 
+
+pertenceAoDicionario :: [String] -> [String] -> Bool
+pertenceAoDicionario (d:ds) (t:ts)= 
+
+palavraNoDicionario :: [String] -> String -> Bool
+palavrasTexto [] palavrasTexto = True
+palavraNoDicionario (d:ds) palavraTexto =
+	|
+	|otherwise = palavraNoDicionario
 
 corrigir :: IO()
 corrigir = do
@@ -94,7 +110,7 @@ main = do
 	menuDicionario palavra
 	lerDicionario
 
-	putStrLn "\nMENU PRINCIPAL\nEscolha uma Opção:\n1 - Corrigir texto\n2 - Finalizar o programa"
+	putStrLn "\n\nMENU PRINCIPAL\nEscolha uma Opção:\n1 - Corrigir texto\n2 - Finalizar o programa"
 
 	opcao <- getLine
 	menuPrincipal opcao
