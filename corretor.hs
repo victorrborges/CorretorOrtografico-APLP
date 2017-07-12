@@ -22,13 +22,49 @@ salvarTexto = do
 escreverDicionario :: String -> IO()
 escreverDicionario palavra = do
 	appendFile "dicionario.txt" palavra
-	appendFile "dicionario.txt" "\n"
+	appendFile "dicionario.txt" " "
+
+corrigirTexto :: IO()
+corrigirTexto = do
+	putStrLn "\nCORREÇÃO DE TEXTOS\n"
+	putStrLn "Digite o texto que você deseja corrigir: "
+	salvarTexto
+	varrerPalavras
+
+dividirTexto :: IO()
+dividirTexto = do
+	--texto <- readFile "texto.txt"
+	--palavrasDoTexto <- splitOn " " texto
+	putStr ""
+
+
+varrerPalavras :: IO()
+varrerPalavras = do
+	dividirTexto
+
+corrigir :: IO()
+corrigir = do
+	putStr ""
+
+adicionar :: IO()
+adicionar = do
+	putStr ""	
+
+menuCorrecao :: IO()
+menuCorrecao = do
+	putStrLn ""
+	putStrLn "Palavra errada ----> "
+	putStrLn "1 - CORRIGIR\n2 - ADICIONAR\n3 - IGNORAR\n\nEscolha uma opção: "
+	opcao <- getLine
+	if(opcao == "1") then corrigir
+		else if (opcao == "2") then adicionar
+			else if(opcao == "3") then putStr ""
+				else putStrLn "Opção inválida"
 
 menuPrincipal :: String -> IO()
 menuPrincipal opcao
 	| opcao == "1" = do
-		putStrLn("recebe texto")
-		salvarTexto
+		corrigirTexto
 		putStrLn "MENU PRINCIPAL\nEscolha uma Opção:\n1 - Corrigir texto\n2 - Finalizar o programa"
 		opcao <- getLine
 		menuPrincipal opcao
@@ -58,7 +94,7 @@ main = do
 	menuDicionario palavra
 	lerDicionario
 
-	putStrLn "MENU PRINCIPAL\nEscolha uma Opção:\n1 - Corrigir texto\n2 - Finalizar o programa"
+	putStrLn "\nMENU PRINCIPAL\nEscolha uma Opção:\n1 - Corrigir texto\n2 - Finalizar o programa"
 
 	opcao <- getLine
 	menuPrincipal opcao
