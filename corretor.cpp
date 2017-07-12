@@ -24,7 +24,6 @@ void adicionar(string palavra);
 bool primeiraVerificacao(string palavra, string palavraDoDicionario);
 bool segundaVerificacao(string palavra, string palavraDoDicionario);
 
-
 int main () {
 	setup();
 	menuPrincipal();
@@ -32,25 +31,26 @@ int main () {
 }
 
 void setup() {
-
 	cout << "" << endl
 			 << "CORRETOR ORTOGRÁFICO!" << endl
 			 << "" << endl
 			 << "Primeiramente, iremos configurar o dicionário." << endl
 	     << "Digite as palavras que você deseja incluir no dicionário: " << endl
 	     << "obs: ao finalizar, digite \"end-dicionario\". " << endl;
+
 	string entrada;
 	while (entrada != "end-dicionario") {
 		cin >> entrada;
 		cin.ignore();
 		dicionario.push_back(entrada);
 	}
+
 	dicionario.pop_back();
 }
 
 vector<string> split(string str, char delimiter) {
   vector<string> internal;
-  stringstream ss(str); // Turn the string into a stream.
+  stringstream ss(str);
   string tok;
 
   while(getline(ss, tok, delimiter)) {
@@ -61,10 +61,7 @@ vector<string> split(string str, char delimiter) {
 }
 
 void dividirTexto() {
-
 	palavrasDoTexto = split(texto, ' ');
-
-
 }
 
 bool pertenceAoDicionario(string palavra) {
@@ -77,9 +74,7 @@ bool pertenceAoDicionario(string palavra) {
 }
 
 void varrerPalavras() {
-
 	dividirTexto();
-
 	for(int i = 0; i < palavrasDoTexto.size(); i++) {
 		if(!pertenceAoDicionario(palavrasDoTexto[i])) {
 			menuCorrecao(palavrasDoTexto[i]);
@@ -91,9 +86,7 @@ void varrerPalavras() {
 	for (int i = 0; i < palavrasDoTexto.size(); i++) {
 		cout << palavrasDoTexto[i] + " ";
 	}
-
 	cout << "" << endl;
-
 }
 
 void corrigirTexto() {
@@ -109,7 +102,6 @@ void menuPrincipal() {
 	int option;
 
 	while(option != 2) {
-
 		cout << "" << endl
 	     	<< "MENU PRINCIPAL" << endl
 				 << "" << endl
@@ -119,9 +111,7 @@ void menuPrincipal() {
 		cin >> option;
 		cin.ignore();
 
-
 		switch (option) {
-
 			case 1:
 				corrigirTexto();
 				break;
@@ -133,25 +123,20 @@ void menuPrincipal() {
 				break;
 		}
 	}
-
 }
-
 
 void menuCorrecao(string palavra) {
 	int option;
-	// O print deve adicionar a palavra errada referente	
 	cout << "" << endl
 			 << "Palavra errada ----> " << palavra << endl
 			 << "1 - CORRIGIR" << endl
 			 << "2 - ADICIONAR" << endl
 			 << "3 - IGNORAR" << endl << endl
 			 << "Escolha opção:" << endl;
-
 			cin >> option;
 	 		cin.ignore();
 
 	 		switch (option) {
-
 	 			case 1:
 	 				corrigir(palavra);
 	 				break;
@@ -163,10 +148,10 @@ void menuCorrecao(string palavra) {
 	 			default:
 	 				cout << "Opção inválida" << endl;
 	 				break;
-
 	 		}
 }
 
+// Verifica se as palavras diferem em apenas dois chars
 bool primeiraVerificacao(string palavra, string palavraDoDicionario) {
 	int diferencaDeTamanho = fabs(palavra.length() - palavraDoDicionario.length());
 	int letrasErradas = 0;
@@ -174,7 +159,7 @@ bool primeiraVerificacao(string palavra, string palavraDoDicionario) {
 	int palavra2 = palavraDoDicionario.length();
 	int count;
 	if(diferencaDeTamanho > 2) {
-		return false;	
+		return false;
 	}
 
 	if (palavra1 > palavra2) {
@@ -195,6 +180,7 @@ bool primeiraVerificacao(string palavra, string palavraDoDicionario) {
 	}
 }
 
+// Verifica se as palavras possuem os mesmos chars
 bool segundaVerificacao(string palavra, string palavraDoDicionario) {
 	sort(palavra.begin(), palavra.end());
 	sort(palavraDoDicionario.begin(), palavraDoDicionario.end());
