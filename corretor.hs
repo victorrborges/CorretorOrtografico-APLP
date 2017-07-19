@@ -58,7 +58,15 @@ salvarPalavraCorreta palavras dicionario = do
 	appendFile "textoCorrigido.txt" " "
 	verificarCorretude (tail palavras) dicionario
 
-
+corrigirPalavra :: [String] -> [String] -> IO()
+corrigirPalavra palavras dicionario = do
+	let palavra = head palavras
+	putStrLn palavra
+	let opcoes = [x | x <- dicionario, segundaVerificacao x palavra || primeiraVerificacao x palavra]
+	--let opcoes2 = [y | y <- dicionario, primeiraVerificacao y palavra]
+	print opcoes
+	--print opcoes2
+	verificarCorretude (tail palavras) dicionario
 
 corrigir :: IO()
 corrigir = do
