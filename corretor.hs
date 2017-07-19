@@ -31,32 +31,34 @@ corrigirTexto = do
 	salvarTexto
 	varrerPalavras
 
-dividirTexto :: [String]
-dividirTexto =
-	texto <- readFile "texto.txt"
-	palavrasDoTexto <- (words texto)
 	
-
-dividirDicionario :: [String]
-dividirDicionario =
-	dicionario <- readFile "dicionario.txt"
-	palavrasDicionario <- (words dicionario)
 
 --verificar as palavras do texto, no dicionario
 varrerPalavras :: IO()
 varrerPalavras = do
-	palavrasTexto = dividirTexto
-	palavrasDicionario = dividirDicionario
-	if(!pertenceAoDicionario(palavrasDicionario palavrasTexto)) then 
+	palavrasTexto <- readFile "texto.txt"
+	palavrasDicionario <- readFile "dicionario.txt"
+	let arrayTexto = (words palavrasTexto)
+	let arrayDicionario = (words palavrasDicionario)
+	verificarCorretude arrayTexto arrayDicionario
+	
 
-pertenceAoDicionario :: [String] -> [String] -> Bool
-pertenceAoDicionario (d:ds) (t:ts)= 
+verificarCorretude :: [String] -> [String] -> IO()
+verificarCorretude palavras dicionario
+	| palavras == [] = putStrLn "acabou"
+	| otherwise = do
+		if head palavras `elem` dicionario then
+			salvarPalavraCorreta palavras dicionario 
+			else 
+			corrigirPalavra palavras dicionario
 
-palavraNoDicionario :: [String] -> String -> Bool
-palavrasTexto [] palavrasTexto = True
-palavraNoDicionario (d:ds) palavraTexto =
-	|
-	|otherwise = palavraNoDicionario
+salvarPalavraCorreta :: [String] -> [String] -> IO()
+salvarPalavraCorreta palavras dicionario = do
+	appendFile "textoCorrigido.txt" (head palavras)
+	appendFile "textoCorrigido.txt" " "
+	verificarCorretude (tail palavras) dicionario
+
+
 
 corrigir :: IO()
 corrigir = do
