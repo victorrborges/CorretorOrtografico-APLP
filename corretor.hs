@@ -9,11 +9,6 @@ menuDicionario palavra
 		palavra <- getLine
 		menuDicionario palavra
 
-lerDicionario :: IO()
-lerDicionario = do
-	contents <- readFile "dicionario.txt"
-	putStr contents
-
 salvarTexto :: IO()
 salvarTexto = do
 	texto <- getLine
@@ -30,7 +25,19 @@ corrigirTexto = do
 	putStrLn "Digite o texto que você deseja corrigir: "
 	salvarTexto
 	varrerPalavras
+	imprimirTextoCorrigido
 
+imprimirTextoCorrigido :: IO()
+imprimirTextoCorrigido = do
+	putStrLn "Texto após correção:"
+	textoFinal <- readFile "textoCorrigido.txt"
+	putStrLn textoFinal
+	putStrLn "\n"
+	limparArquivo "textoCorrigido.txt"
+	limparArquivo "texto.txt"
+
+limparArquivo :: String -> IO()
+limparArquivo nomeArquivo = writeFile nomeArquivo ""
 	
 
 --verificar as palavras do texto, no dicionario
@@ -45,7 +52,7 @@ varrerPalavras = do
 
 verificarCorretude :: [String] -> [String] -> IO()
 verificarCorretude palavras dicionario
-	| palavras == [] = putStrLn "acabou"
+	| palavras == [] = putStrLn ""
 	| otherwise = do
 		if head palavras `elem` dicionario then
 			salvarPalavraCorreta palavras dicionario 
@@ -59,23 +66,36 @@ salvarPalavraCorreta palavras dicionario = do
 	verificarCorretude (tail palavras) dicionario
 
 corrigirPalavra :: [String] -> [String] -> IO()
-corrigirPalavra palavras dicionario = do
-	let palavra = head palavras
-	let opcoes = [x | x <- dicionario, segundaVerificacao x palavra || primeiraVerificacao x palavra]
-	menuCorrecao palavra opcoes
-	corrigirPalavra (tail palavras) dicionario
+corrigirPalavra palavras dicionario
+	|null palavras = putStr("")
+	|otherwise = do
+		let palavra = head palavras
+		let opcoes = [x | x <- dicionario, segundaVerificacao x palavra || primeiraVerificacao x palavra]
+		menuCorrecao palavra opcoes
+		corrigirPalavra (tail palavras) dicionario
 	
 
 menuCorrecao :: String -> [String] -> IO()
-menuCorrecao palavra opcoes = do
-	putStrLn palavra
-	putStrLn "Palavra errada ----> " 
-	putStrLn "Voce quis dizer "
-	putStr(head opcoes)
-	putStr "? \n1-Sim\n2-Nao\n" 
-	opcao <- getLine
-	if(opcao == "1") then adicionarAoTextoFinal (head opcoes)
-	else menuCorrecao palavra (tail opcoes)
+menuCorrecao palavra opcoes
+	|null opcoes = do
+		adicionarAoTextoFinal(palavra)
+		putStr "Você deseja adicionar \""
+		putStr palavra
+		putStrLn "\" ao dicionario?"
+		putStrLn "1-Sim \n2-Nao"
+		opcao <- getLine
+		if(opcao == "1") then escreverDicionario palavra
+		else putStrLn("")
+	|otherwise = do
+		putStr "Palavra errada ----> " 
+		putStr palavra
+		putStrLn("")
+		putStrLn "Voce quis dizer "
+		putStr(head opcoes)
+		putStrLn "? \n1-Sim\n2-Nao" 
+		opcao <- getLine
+		if(opcao == "1") then adicionarAoTextoFinal (head opcoes)
+		else menuCorrecao palavra (tail opcoes)
 
 adicionarAoTextoFinal :: String -> IO()
 adicionarAoTextoFinal palavra = do
@@ -89,7 +109,7 @@ menuPrincipal opcao
 		putStrLn "MENU PRINCIPAL\nEscolha uma Opção:\n1 - Corrigir texto\n2 - Finalizar o programa"
 		opcao <- getLine
 		menuPrincipal opcao
-	| otherwise = putStr("")
+	| otherwise = limparArquivo "dicionario.txt"
 
 primeiraVerificacao :: [Char] -> [Char] -> Bool
 primeiraVerificacao x y
@@ -113,7 +133,6 @@ main = do
 	putStrLn "Primeiramente, iremos configurar o dicionário.\nDigite as palavras que você deseja incluir no dicionário:\nobs: ao finalizar, digite \"end-dicionario\""
 	palavra <- getLine
 	menuDicionario palavra
-	lerDicionario
 
 	putStrLn "\n\nMENU PRINCIPAL\nEscolha uma Opção:\n1 - Corrigir texto\n2 - Finalizar o programa"
 
