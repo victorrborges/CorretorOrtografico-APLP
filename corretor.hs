@@ -61,31 +61,26 @@ salvarPalavraCorreta palavras dicionario = do
 corrigirPalavra :: [String] -> [String] -> IO()
 corrigirPalavra palavras dicionario = do
 	let palavra = head palavras
-	putStrLn palavra
 	let opcoes = [x | x <- dicionario, segundaVerificacao x palavra || primeiraVerificacao x palavra]
-	--let opcoes2 = [y | y <- dicionario, primeiraVerificacao y palavra]
-	print opcoes
-	--print opcoes2
-	verificarCorretude (tail palavras) dicionario
+	menuCorrecao palavra opcoes
+	corrigirPalavra (tail palavras) dicionario
+	
 
-corrigir :: IO()
-corrigir = do
-	putStr ""
-
-adicionar :: IO()
-adicionar = do
-	putStr ""	
-
-menuCorrecao :: IO()
-menuCorrecao = do
-	putStrLn ""
-	putStrLn "Palavra errada ----> "
-	putStrLn "1 - CORRIGIR\n2 - ADICIONAR\n3 - IGNORAR\n\nEscolha uma opção: "
+menuCorrecao :: String -> [String] -> IO()
+menuCorrecao palavra opcoes = do
+	putStrLn palavra
+	putStrLn "Palavra errada ----> " 
+	putStrLn "Voce quis dizer "
+	putStr(head opcoes)
+	putStr "? \n1-Sim\n2-Nao\n" 
 	opcao <- getLine
-	if(opcao == "1") then corrigir
-		else if (opcao == "2") then adicionar
-			else if(opcao == "3") then putStr ""
-				else putStrLn "Opção inválida"
+	if(opcao == "1") then adicionarAoTextoFinal (head opcoes)
+	else menuCorrecao palavra (tail opcoes)
+
+adicionarAoTextoFinal :: String -> IO()
+adicionarAoTextoFinal palavra = do
+	appendFile "textoCorrigido.txt" palavra
+	appendFile "textoCorrigido.txt" " "
 
 menuPrincipal :: String -> IO()
 menuPrincipal opcao
