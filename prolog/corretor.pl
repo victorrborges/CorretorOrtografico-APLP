@@ -50,7 +50,7 @@ cria_entrada:-
     told.
 
 escolha_menu1(N):-
-    (N == 1) -> cria_entrada;
+    (N == 1) -> primeira_verificacao;
     halt.
 
 /*
@@ -64,22 +64,29 @@ menu1:-
     atom_number(A, N),
     escolha_menu1(N).
 
+converte_entrada(L1):-
+    open('entrada.txt', read, S),
+    read_line_to_codes(S,X),
+    string_to_atom(X, X1),
+    split_string(X1, ' ', "", L),
+    close(S),
+    L1 is L.
+    
+
+primeira_verificacao:-
+    converte_entrada(L),
+    string_chars(L, G),
+    write(G).
+
 :- initialization main.
 
 main:-
-    /*
-    -Inicializar o dicionario:
-        -Pegar entrada e salvar em dicionario.txt
-    */
+
     limpa_entrada,
     limpa_dicionario,
     cria_dicionario,
-
-    /*
-    -Menu 1:
-        -Corrigir
-        -Encerrar
-    */
+    cria_entrada,
+    
     menu1.
 
     /*
