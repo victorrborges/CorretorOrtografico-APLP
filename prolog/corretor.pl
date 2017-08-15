@@ -11,7 +11,8 @@ Inclui a palavra no arquivo dicionario.txt
 */
 insere_dicionario(A):-
     append('dicionario.txt'),
-    write(A), nl,
+    write(A),
+    write(" "),
     told,
     cria_dicionario.
 
@@ -21,7 +22,7 @@ do preenchimento do dicionario.
 */
 compara_flag(A):-
     (A \= 'end-dicionario') -> insere_dicionario(A);
-    write("").
+    write("Fim do Dicionario"), nl.
 
 /*
 -Captura a entrada para o dicionario e salva no arquivo dicionario.txt
@@ -42,7 +43,7 @@ limpa_entrada:-
 -Captura a entrada das palavras a serem corrigidas e as salva no arquivo entrada.txt
 */
 cria_entrada:-
-    write("Informe as palavras a serem corrigidas"),nl,
+    write("Informe o texto a ser corrigido:"),nl,
     read_line_to_codes(user_input, A1),
     string_to_atom(A1, A),
     append('entrada.txt'),
@@ -50,7 +51,7 @@ cria_entrada:-
     told.
 
 escolha_menu1(N):-
-    (N == 1) -> primeira_verificacao;
+    (N == 1) -> converte_entrada;
     halt.
 
 /*
@@ -64,19 +65,36 @@ menu1:-
     atom_number(A, N),
     escolha_menu1(N).
 
-converte_entrada(L1):-
+/*
+-Converte a entrada que eh feita toda em uma linha para um array de strings.
+-Converte tambem o conteudo do dicionario para um array de strings e chama
+ o metodo primeira verificacao com esses dois arrays.
+*/
+converte_entrada:-
     open('entrada.txt', read, S),
     read_line_to_codes(S,X),
     string_to_atom(X, X1),
     split_string(X1, ' ', "", L),
     close(S),
-    L1 is L.
-    
+    converte_dicionario(LD).
+    /*primeira_verificacao(LD, L).*/
 
-primeira_verificacao:-
-    converte_entrada(L),
-    string_chars(L, G),
-    write(G).
+converte_dicionario(L):-
+    open('dicionario.txt', read, S),
+    read_line_to_codes(S,X),
+    string_to_atom(X, X1),
+    split_string(X1, ' ', " ", L),
+    close(S).
+
+primeira_verificacao([],[]):-
+    /*
+    -Mudar isso aqui, quando esse método receber uma lista vazia ele vai chamar a segunda verificação
+    */
+    halt.
+
+primeira_verificacao([HD|TD], [H|T]):-
+    write("Head da entrada:"),nl,
+    write(H),nl.
 
 :- initialization main.
 
