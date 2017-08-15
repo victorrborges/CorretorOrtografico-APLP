@@ -67,18 +67,21 @@ menu1:-
 
 /*
 -Converte a entrada que eh feita toda em uma linha para um array de strings.
--Converte tambem o conteudo do dicionario para um array de strings e chama
- o metodo primeira verificacao com esses dois arrays.
+-Chama o metodo converte_dicionario
+-Chama o metodo primeira_verificacao que inicia as verificacoes de tamanho das palavras
 */
 converte_entrada:-
     open('entrada.txt', read, S),
     read_line_to_codes(S,X),
     string_to_atom(X, X1),
-    split_string(X1, ' ', "", L),
+    split_string(X1, ' ', " ", L),
     close(S),
-    converte_dicionario(LD).
-    /*primeira_verificacao(LD, L).*/
+    converte_dicionario(LD),
+    primeira_verificacao(LD, L).
 
+/*
+-Converte o conteudo do arquivo dicionario.txt em um array de strings
+*/
 converte_dicionario(L):-
     open('dicionario.txt', read, S),
     read_line_to_codes(S,X),
@@ -86,15 +89,40 @@ converte_dicionario(L):-
     split_string(X1, ' ', " ", L),
     close(S).
 
-primeira_verificacao([],[]):-
+primeira_verificacao(L,[]):- halt.
+primeira_verificacao([],L):- halt.
+
+/*
+-Inicia as verificacoes de tamanho entre as palavras
+*/
+primeira_verificacao([HD|TD], [H|T]):-
+    verifica_tamanho(HD, [H|T]),
+    primeira_verificacao(TD, [H|T]).
+
+
+
+verifica_tamanho(HD,[]):-
     /*
-    -Mudar isso aqui, quando esse método receber uma lista vazia ele vai chamar a segunda verificação
+    -Mudar isso aqui, quando esse método receber uma lista vazia 
+     ele vai chamar a segunda verificação (EU ACHO).
     */
     halt.
 
-primeira_verificacao([HD|TD], [H|T]):-
-    write("Head da entrada:"),nl,
-    write(H),nl.
+verifica_tamanho(HD, [H|T]):-
+    string_length(HD, SD),
+    string_length(H, S),
+    compara_tamanho(SD,S,HD,H),
+    verifica_tamanho(HD, T).
+
+compara_tamanho(SD,S,HD,H):-
+    (abs(SD-S) < 3), segunda_verificacao(HD,H).
+
+compara_tamanho(SD,S,HD, H):-
+    (abs(SD-S) >= 3).
+
+segunda_verificacao(H):-
+    append('segunda-verif.txt'), write(H), write(" "), told.
+
 
 :- initialization main.
 
