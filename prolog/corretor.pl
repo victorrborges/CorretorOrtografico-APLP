@@ -89,18 +89,22 @@ converte_dicionario(L):-
     split_string(X1, ' ', " ", L),
     close(S).
 
-primeira_verificacao(L,[]):- halt.
-primeira_verificacao([],L):- halt.
-
 /*
 -Inicia as verificacoes de tamanho entre as palavras
 */
+primeira_verificacao(L,[]):- halt.
+primeira_verificacao([],L):- halt.
+
 primeira_verificacao([HD|TD], [H|T]):-
     verifica_tamanho(HD, [H|T]),
     primeira_verificacao(TD, [H|T]).
 
 
 
+/*
+-Esse metodo extrai o tamanho das palavras e invoca o metodo compara_tamanho
+ para verificar se a diferenca na quantidade de caracteres estah na faixa aceitavel
+*/
 verifica_tamanho(HD,[]):-
     /*
     -Mudar isso aqui, quando esse método receber uma lista vazia 
@@ -114,14 +118,33 @@ verifica_tamanho(HD, [H|T]):-
     compara_tamanho(SD,S,HD,H),
     verifica_tamanho(HD, T).
 
+
+
+/*
+-Extrai a diferenca entre os tamanhos recebidos e invoca 
+ a segunda verificacao caso seja possivel 
+*/
 compara_tamanho(SD,S,HD,H):-
-    (abs(SD-S) < 3), segunda_verificacao(HD,H).
+    (abs(SD-S) < 3),
+    string_chars(HD, CD),
+    string_chars(H, C),
+    segunda_verificacao(HD,CD,C).
 
 compara_tamanho(SD,S,HD, H):-
     (abs(SD-S) >= 3).
 
-segunda_verificacao(H):-
-    append('segunda-verif.txt'), write(H), write(" "), told.
+
+/*
+-Verifica se as letras das palavras do dicionario estao
+ na palavra do texto que estah sob averiguaracao.
+-Em caso positivo insere a palavra do dicionario no arquivo sugestoes.txt
+*/
+segunda_verificacao(HD, [], C):-
+    append('sugestoes.txt'), write(HD),nl, told. 
+
+segunda_verificacao(HD, [H|T], C):-
+    (member(H, C)) -> segunda_verificacao(HD, T, C).
+
 
 
 :- initialization main.
