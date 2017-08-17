@@ -140,7 +140,7 @@ compara_tamanho(SD,S,HD, H):-
 -Em caso positivo insere a palavra do dicionario no arquivo sugestoes.txt
 */
 segunda_verificacao(HD, [], C):-
-    append('sugestoes.txt'), write(HD),nl, told. 
+    append('sugestoes.txt'), write(HD),write(" "), told. 
 
 segunda_verificacao(HD, [H|T], C):-
     (member(H, C)) -> segunda_verificacao(HD, T, C).
