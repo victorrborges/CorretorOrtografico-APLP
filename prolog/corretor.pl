@@ -77,7 +77,54 @@ converte_entrada:-
     split_string(X1, ' ', " ", L),
     close(S),
     converte_dicionario(LD),
-    primeira_verificacao(LD, L).
+    estaNoDicionario(LD, L).
+
+
+/*	string_to_list(HD, HL),
+	string_to_list(H, L),
+	msort(HL,HS),
+	msort(L, LS),*/
+
+estaNoDicionario([HD|TD],[]) :- write("fim").
+estaNoDicionario([HD|TD],[HD|T]) :- salvaPalavra(HD), 
+				converte_dicionario(LD),
+				estaNoDicionario(LD,T).
+estaNoDicionario([HD|TD],[H|T]) :- estaNoDicionario(TD, [H|T]).
+estaNoDicionario([],[H|T]) :- converte_dicionario(LD1),
+			      primeiraVerificacao(LD1, H),
+			      converte_dicionario(LD),
+			      estaNoDicionario(LD,T).
+
+primeiraVerificacao([HD|TD], H) :- 
+			  
+
+
+
+varrerPalavras([],[H|T]) :- write("Acabou").
+varrerPalavras([HD|TD],[]) :- write("Deseja adicionar"),
+				write(HD),
+				write("ao dicionario?"),
+				read_line_to_codes(user_input, B1),
+				string_to_atom(B1, B),
+				atom_number(B, N),
+				acao(N,HD,TD,H,T).
+
+/*A e B palavras apos o sort, D palavra do dicionario, S palavra incorreta, TD e T tails*/
+primeira(A,A,HD,TD,H,T) :- write(HD),
+	write(" voce quis dizer: "),
+	write(H),
+	write("? - 1: sim 2:nao\n"),
+	read_line_to_codes(user_input, B1),
+	string_to_atom(B1, B),
+	atom_number(B, N),
+	acao(N,HD,TD,H,T).
+
+acao(N,HD,TD,H,T) :- (N==1) -> salvaPalavra(HD),
+				converte_dicionario(L),
+				varrerPalavras(TD,L).
+acao(N,HD,TD,H,T) :- (N==2) -> varrerPalavras(H,TD).
+
+salvaPalavra(D) :- append('sugestoes.txt'), write(D),write(" "), told.
 
 /*
 -Converte o conteudo do arquivo dicionario.txt em um array de strings
