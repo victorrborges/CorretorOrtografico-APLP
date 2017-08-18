@@ -127,9 +127,11 @@ repostaPrimeiraVerificacao(1, [HD|TD], H) :- salvaPalavra(HD).
 repostaPrimeiraVerificacao(2, [HD|TD], H) :- primeiraVerificacao(TD, H).
 
 
-segundaVerificacao([HD|TD], H) :-  string_length(HD, HL),
-    				 string_length(H, L),
-    				 compara_tamanho(HL,L,[HD|TD],H).
+segundaVerificacao([HD|TD], H) :-  string_to_list(HD, HL),
+				   string_to_list(H, L),
+				   subtract(L,HL, RL),
+				   length(RL, R),
+    				 compara_tamanho(R,[HD|TD],H).
 segundaVerificacao([], H) :- adicionarAoDicionario(H).
 
 adicionarAoDicionario(H) :- write("Voce gostaria de adicionar "),
@@ -141,15 +143,18 @@ adicionarAoDicionario(H) :- write("Voce gostaria de adicionar "),
 			   respostaAdicionarAoDicionario(N,H).
 
 respostaAdicionarAoDicionario(1,H) :- adiciona_dicionario(H),
-				     salvaPalavra(H).
-respostaAdicionarAoDicionario(2,H) :- salvaPalavra(H).
-				
+				     salvaPalavra(H),
+				     limpaCache(H).
+respostaAdicionarAoDicionario(2,H) :- salvaPalavra(H),
+				      limpaCache(H).
+
+limpaCache(H) :- write("limpa").				
 
 repostaSegundaVerificacao(1, [HD|TD], H) :- salvaPalavra(HD). 
 repostaSegundaVerificacao(2, [HD|TD], H) :- segundaVerificacao(TD, H).
 
 
-compara_tamanho(SD,S,[HD|TD],H) :- (abs(SD-S) < 3) -> write(H),
+compara_tamanho(R,[HD|TD],H) :- (R < 3) -> write(H),
 					   write(" voce quis dizer "),
 					   write(HD), 
 					   write("? 1sim 2nao"), nl,
@@ -158,7 +163,7 @@ compara_tamanho(SD,S,[HD|TD],H) :- (abs(SD-S) < 3) -> write(H),
 				           atom_number(B, N),
 					   repostaSegundaVerificacao(N, [HD|TD], H).
 
-compara_tamanho(SD,S,[HD|TD],H) :- (abs(SD-S) > 2) -> segundaVerificacao(TD, H).
+compara_tamanho(R,[HD|TD],H) :- (R > 2) -> segundaVerificacao(TD, H).
 
 
 
@@ -216,19 +221,6 @@ verifica_tamanho(HD, [H|T]):-
 */
 
  
-
-/*
--Verifica se as letras das palavras do dicionario estao
- na palavra do texto que estah sob averiguaracao.
--Em caso positivo insere a palavra do dicionario no arquivo sugestoes.txt
-*/
-segunda_verificacao(HD, [], C):-
-    append('sugestoes.txt'), write(HD),write(" "), told. 
-
-segunda_verificacao(HD, [H|T], C):-
-    (member(H, C)) -> segunda_verificacao(HD, T, C).
-
-
 
 :- initialization main.
 
