@@ -131,10 +131,11 @@ repostaPrimeiraVerificacao(2, [HD|TD], H) :- primeiraVerificacao(TD, H).
 
 segundaVerificacao([HD|TD], H) :-  string_to_list(HD, HL),
 				   string_to_list(H, L),
-				   subtract(L,HL, RL),
-					string_to_list(A,RL),
-				   length(RL, R),
-    				 compara_tamanho(R,[HD|TD],H).
+				   intersection(HL,L,IL),
+				   subtract(HL,IL, RL),
+				   string_to_list(A,RL),
+				   length(IL, R),
+    				   compara_tamanho(R,[HD|TD],H).
 segundaVerificacao([], H) :- adicionarAoDicionario(H).
 
 adicionarAoDicionario(H) :- write("Voce gostaria de adicionar "),
