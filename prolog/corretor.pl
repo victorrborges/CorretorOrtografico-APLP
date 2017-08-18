@@ -61,7 +61,8 @@ adiciona_dicionario(A):-
     told.
 
 escolha_menu1(N):-
-    (N == 1) -> converte_entrada;
+    (N == 1) -> cria_entrada,
+		converte_entrada;
     halt.
 
 /*
@@ -91,7 +92,8 @@ converte_entrada:-
 
 
 
-estaNoDicionario([HD|TD],[]) :- imprimeTextoFinal().
+estaNoDicionario([HD|TD],[]) :- imprimeTextoFinal(), nl,
+				menu1.
 estaNoDicionario([HD|TD],[HD|T]) :- salvaPalavra(HD), 
 				converte_dicionario(LD),
 				estaNoDicionario(LD,T).
@@ -116,6 +118,7 @@ realizaPrimeiraVerificacao(D, D, [HD|TD], H) :- write(H),
 					   string_to_atom(B1, B),
 				           atom_number(B, N),
 					   repostaPrimeiraVerificacao(N, [HD|TD], H).
+
 
 realizaPrimeiraVerificacao(D, T, [HD|TD], H) :- segundaVerificacao([HD|TD], H). 
 
@@ -235,8 +238,6 @@ main:-
     limpa_dicionario,
     limpa_sugestoes,
     cria_dicionario,
-    cria_entrada,
-    
     menu1.
 
     /*
