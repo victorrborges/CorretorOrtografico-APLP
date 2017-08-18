@@ -134,7 +134,7 @@ segundaVerificacao([HD|TD], H) :-  string_to_list(HD, HL),
 				   intersection(HL,L,IL),
 				   subtract(HL,IL, RL),
 				   string_to_list(A,RL),
-				   length(IL, R),
+				   length(RL, R),
     				   compara_tamanho(R,[HD|TD],H).
 segundaVerificacao([], H) :- adicionarAoDicionario(H).
 
