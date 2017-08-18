@@ -94,9 +94,9 @@ converte_entrada:-
 
 
 
-estaNoDicionario([HD|TD],[]) :- imprimeTextoFinal(), nl,
+estaNoDicionario([HD|TD],[]) :- imprimeTextoFinal(_), nl,
 				menu1.
-estaNoDicionario([HD|TD],[HD|T]) :- salvaPalavra(HD), 
+estaNoDicionario([HD|TD],[HD|T]) :- salvaPalavra(HD),
 				converte_dicionario(LD),
 				estaNoDicionario(LD,T).
 estaNoDicionario([HD|TD],[H|T]) :- estaNoDicionario(TD, [H|T]).
@@ -114,18 +114,18 @@ primeiraVerificacao([], H) :- converte_dicionario(LD), segundaVerificacao(LD,H).
 
 realizaPrimeiraVerificacao(D, D, [HD|TD], H) :- write(H),
 					   write(" voce quis dizer "),
-					   write(HD), 
-					   write("? 1sim 2nao"), nl,
+					   write(HD),
+					   write("? 1 - Sim 2 - Nao"), nl,
 					   read_line_to_codes(user_input, B1),
 					   string_to_atom(B1, B),
 				           atom_number(B, N),
 					   repostaPrimeiraVerificacao(N, [HD|TD], H).
 
 
-realizaPrimeiraVerificacao(D, T, [HD|TD], H) :- segundaVerificacao([HD|TD], H). 
+realizaPrimeiraVerificacao(D, T, [HD|TD], H) :- segundaVerificacao([HD|TD], H).
 
 
-repostaPrimeiraVerificacao(1, [HD|TD], H) :- salvaPalavra(HD). 
+repostaPrimeiraVerificacao(1, [HD|TD], H) :- salvaPalavra(HD).
 repostaPrimeiraVerificacao(2, [HD|TD], H) :- primeiraVerificacao(TD, H).
 
 
@@ -139,8 +139,8 @@ segundaVerificacao([HD|TD], H) :-  string_to_list(HD, HL),
 segundaVerificacao([], H) :- adicionarAoDicionario(H).
 
 adicionarAoDicionario(H) :- write("Voce gostaria de adicionar "),
-			   write(H), 
-			   write(" ao dicionario? 1sim 2nao"), nl,
+			   write(H),
+			   write(" ao dicionario? 1 - Sim 2 - Nao"), nl,
 			   read_line_to_codes(user_input, B1),
 			   string_to_atom(B1, B),
 			   atom_number(B, N),
@@ -151,14 +151,14 @@ respostaAdicionarAoDicionario(1,H) :- adiciona_dicionario(H),
 respostaAdicionarAoDicionario(2,H) :- salvaPalavra(H).
 
 
-repostaSegundaVerificacao(1, [HD|TD], H) :- salvaPalavra(HD). 
+repostaSegundaVerificacao(1, [HD|TD], H) :- salvaPalavra(HD).
 repostaSegundaVerificacao(2, [HD|TD], H) :- segundaVerificacao(TD, H).
 
 
 compara_tamanho(R,[HD|TD],H) :- (R < 3) -> write(H),
 					   write(" voce quis dizer "),
-					   write(HD), 
-					   write("? 1sim 2nao"), nl,
+					   write(HD),
+					   write("? 1 - Sim 2 - Nao"), nl,
 					   read_line_to_codes(user_input, B1),
 					   string_to_atom(B1, B),
 				           atom_number(B, N),
@@ -170,7 +170,7 @@ compara_tamanho(R,[HD|TD],H) :- (R > 2) -> segundaVerificacao(TD, H).
 
 salvaPalavra(D) :- append('sugestoes.txt'), write(D),write(" "), told.
 
-imprimeTextoFinal() :- open('sugestoes.txt', read, S),
+imprimeTextoFinal(_) :- open('sugestoes.txt', read, S),
     			read_line_to_codes(S,X),
 			string_to_atom(X, X1),
 			write(X1).
@@ -203,7 +203,7 @@ primeira_verificacao([HD|TD], [H|T]):-
 */
 verifica_tamanho(HD,[]):-
     /*
-    -Mudar isso aqui, quando esse método receber uma lista vazia 
+    -Mudar isso aqui, quando esse método receber uma lista vazia
      ele vai chamar a segunda verificação (EU ACHO).
     */
     halt.
@@ -217,16 +217,15 @@ verifica_tamanho(HD, [H|T]):-
 
 
 /*
--Extrai a diferenca entre os tamanhos recebidos e invoca 
- a segunda verificacao caso seja possivel 
+-Extrai a diferenca entre os tamanhos recebidos e invoca
+ a segunda verificacao caso seja possivel
 */
 
- 
+
 
 :- initialization main.
 
 main:-
-
     limpa_entrada,
     limpa_dicionario,
     limpa_sugestoes,
