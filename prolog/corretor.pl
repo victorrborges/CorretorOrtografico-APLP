@@ -80,25 +80,38 @@ converte_entrada:-
     estaNoDicionario(LD, L).
 
 
-/*	string_to_list(HD, HL),
-	string_to_list(H, L),
-	msort(HL,HS),
-	msort(L, LS),*/
 
 estaNoDicionario([HD|TD],[]) :- write("fim").
 estaNoDicionario([HD|TD],[HD|T]) :- salvaPalavra(HD), 
 				converte_dicionario(LD),
 				estaNoDicionario(LD,T).
 estaNoDicionario([HD|TD],[H|T]) :- estaNoDicionario(TD, [H|T]).
-estaNoDicionario([],[H|T]) :- converte_dicionario(LD1),
-			      primeiraVerificacao(LD1, H),
-			      converte_dicionario(LD),
+estaNoDicionario([],[H|T]) :- converte_dicionario(LD),
+			      primeiraVerificacao(LD, H),
 			      estaNoDicionario(LD,T).
 
-primeiraVerificacao([HD|TD], H) :- 
-			  
+primeiraVerificacao([HD|TD], H) :- string_to_list(HD, HL),
+				   string_to_list(H, L),
+				   msort(HL,HS),
+				   msort(L, LS),
+				   realizaPrimeiraVerificacao(HS,LS, [HD|TD], H).
+
+primeiraVerificacao([], H) :- converte_dicionario(LD), segundaVerificacao(LD,H).
+
+realizaPrimeiraVerificacao(D, D, [HD|TD], H) :- write(H),
+					   write(" voce quis dizer "),
+					   write(HD), 
+					   write("? 1sim 2nao"), nl,
+					   read_line_to_codes(user_input, B1),
+					   string_to_atom(B1, B),
+				           atom_number(B, N),
+					   repostaPrimeiraVerificacao(N, [HD|TD], H).
+
+repostaPrimeiraVerificacao(1, [HD|TD], H) :- salvaPalavra(H). 
+repostaPrimeiraVerificacao(2, [HD|TD], H) :- primeiraVerificacao(TD, H).
 
 
+segundaVerificacao([HD|LD], H) :- write("segundaverificacao").
 
 varrerPalavras([],[H|T]) :- write("Acabou").
 varrerPalavras([HD|TD],[]) :- write("Deseja adicionar"),
