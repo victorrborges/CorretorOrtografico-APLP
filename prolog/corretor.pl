@@ -61,7 +61,9 @@ adiciona_dicionario(A):-
     told.
 
 escolha_menu1(N):-
-    (N == 1) -> cria_entrada,
+    (N == 1) -> limpa_sugestoes,
+		limpa_entrada,
+		cria_entrada,
 		converte_entrada;
     halt.
 
@@ -130,6 +132,7 @@ repostaPrimeiraVerificacao(2, [HD|TD], H) :- primeiraVerificacao(TD, H).
 segundaVerificacao([HD|TD], H) :-  string_to_list(HD, HL),
 				   string_to_list(H, L),
 				   subtract(L,HL, RL),
+					string_to_list(A,RL),
 				   length(RL, R),
     				 compara_tamanho(R,[HD|TD],H).
 segundaVerificacao([], H) :- adicionarAoDicionario(H).
@@ -143,12 +146,9 @@ adicionarAoDicionario(H) :- write("Voce gostaria de adicionar "),
 			   respostaAdicionarAoDicionario(N,H).
 
 respostaAdicionarAoDicionario(1,H) :- adiciona_dicionario(H),
-				     salvaPalavra(H),
-				     limpaCache(H).
-respostaAdicionarAoDicionario(2,H) :- salvaPalavra(H),
-				      limpaCache(H).
+				     salvaPalavra(H).
+respostaAdicionarAoDicionario(2,H) :- salvaPalavra(H).
 
-limpaCache(H) :- write("limpa").				
 
 repostaSegundaVerificacao(1, [HD|TD], H) :- salvaPalavra(HD). 
 repostaSegundaVerificacao(2, [HD|TD], H) :- segundaVerificacao(TD, H).
