@@ -38,6 +38,10 @@ cria_dicionario:-
 */
 limpa_entrada:-
     tell('entrada.txt'), write(''), told.
+limpa_sugestoes:-
+    tell('sugestoes.txt'), write(''), told.
+
+
 
 /*
 -Captura a entrada das palavras a serem corrigidas e as salva no arquivo entrada.txt
@@ -48,6 +52,12 @@ cria_entrada:-
     string_to_atom(A1, A),
     append('entrada.txt'),
     write(A),
+    told.
+
+adiciona_dicionario(A):-
+    append('dicionario.txt'),
+    write(A),
+    write(" "),
     told.
 
 escolha_menu1(N):-
@@ -81,7 +91,7 @@ converte_entrada:-
 
 
 
-estaNoDicionario([HD|TD],[]) :- write("fim").
+estaNoDicionario([HD|TD],[]) :- imprimeTextoFinal().
 estaNoDicionario([HD|TD],[HD|T]) :- salvaPalavra(HD), 
 				converte_dicionario(LD),
 				estaNoDicionario(LD,T).
@@ -107,37 +117,54 @@ realizaPrimeiraVerificacao(D, D, [HD|TD], H) :- write(H),
 				           atom_number(B, N),
 					   repostaPrimeiraVerificacao(N, [HD|TD], H).
 
-repostaPrimeiraVerificacao(1, [HD|TD], H) :- salvaPalavra(H). 
+realizaPrimeiraVerificacao(D, T, [HD|TD], H) :- segundaVerificacao([HD|TD], H). 
+
+
+repostaPrimeiraVerificacao(1, [HD|TD], H) :- salvaPalavra(HD). 
 repostaPrimeiraVerificacao(2, [HD|TD], H) :- primeiraVerificacao(TD, H).
 
 
-segundaVerificacao([HD|LD], H) :- write("segundaverificacao").
+segundaVerificacao([HD|TD], H) :-  string_length(HD, HL),
+    				 string_length(H, L),
+    				 compara_tamanho(HL,L,[HD|TD],H).
+segundaVerificacao([], H) :- adicionarAoDicionario(H).
 
-varrerPalavras([],[H|T]) :- write("Acabou").
-varrerPalavras([HD|TD],[]) :- write("Deseja adicionar"),
-				write(HD),
-				write("ao dicionario?"),
-				read_line_to_codes(user_input, B1),
-				string_to_atom(B1, B),
-				atom_number(B, N),
-				acao(N,HD,TD,H,T).
+adicionarAoDicionario(H) :- write("Voce gostaria de adicionar "),
+			   write(H), 
+			   write(" ao dicionario? 1sim 2nao"), nl,
+			   read_line_to_codes(user_input, B1),
+			   string_to_atom(B1, B),
+			   atom_number(B, N),
+			   respostaAdicionarAoDicionario(N,H).
 
-/*A e B palavras apos o sort, D palavra do dicionario, S palavra incorreta, TD e T tails*/
-primeira(A,A,HD,TD,H,T) :- write(HD),
-	write(" voce quis dizer: "),
-	write(H),
-	write("? - 1: sim 2:nao\n"),
-	read_line_to_codes(user_input, B1),
-	string_to_atom(B1, B),
-	atom_number(B, N),
-	acao(N,HD,TD,H,T).
+respostaAdicionarAoDicionario(1,H) :- adiciona_dicionario(H),
+				     salvaPalavra(H).
+respostaAdicionarAoDicionario(2,H) :- salvaPalavra(H).
+				
 
-acao(N,HD,TD,H,T) :- (N==1) -> salvaPalavra(HD),
-				converte_dicionario(L),
-				varrerPalavras(TD,L).
-acao(N,HD,TD,H,T) :- (N==2) -> varrerPalavras(H,TD).
+repostaSegundaVerificacao(1, [HD|TD], H) :- salvaPalavra(HD). 
+repostaSegundaVerificacao(2, [HD|TD], H) :- segundaVerificacao(TD, H).
+
+
+compara_tamanho(SD,S,[HD|TD],H) :- (abs(SD-S) < 3) -> write(H),
+					   write(" voce quis dizer "),
+					   write(HD), 
+					   write("? 1sim 2nao"), nl,
+					   read_line_to_codes(user_input, B1),
+					   string_to_atom(B1, B),
+				           atom_number(B, N),
+					   repostaSegundaVerificacao(N, [HD|TD], H).
+
+compara_tamanho(SD,S,[HD|TD],H) :- (abs(SD-S) > 2) -> segundaVerificacao(TD, H).
+
+
 
 salvaPalavra(D) :- append('sugestoes.txt'), write(D),write(" "), told.
+
+imprimeTextoFinal() :- open('sugestoes.txt', read, S),
+    			read_line_to_codes(S,X),
+			string_to_atom(X, X1),
+			write(X1).
 
 /*
 -Converte o conteudo do arquivo dicionario.txt em um array de strings
@@ -184,15 +211,8 @@ verifica_tamanho(HD, [H|T]):-
 -Extrai a diferenca entre os tamanhos recebidos e invoca 
  a segunda verificacao caso seja possivel 
 */
-compara_tamanho(SD,S,HD,H):-
-    (abs(SD-S) < 3),
-    string_chars(HD, CD),
-    string_chars(H, C),
-    segunda_verificacao(HD,CD,C).
 
-compara_tamanho(SD,S,HD, H):-
-    (abs(SD-S) >= 3).
-
+ 
 
 /*
 -Verifica se as letras das palavras do dicionario estao
@@ -213,6 +233,7 @@ main:-
 
     limpa_entrada,
     limpa_dicionario,
+    limpa_sugestoes,
     cria_dicionario,
     cria_entrada,
     
